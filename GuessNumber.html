@@ -1,0 +1,231 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .MainDiv{
+            background-color:white;
+        }
+        body{
+            background-color:indigo;
+            width: 449px;
+            height: 340px;
+            align-items: center;
+            text-align: center;
+            margin: auto;
+            /* border-radius: 2rem; */
+            border: 5px solid orange;
+            padding: 100px;
+        }
+        .Des{
+            text-align: center;
+            padding-top: 80px;
+            font-size: large;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-weight: 100;
+        }
+        .NorP{
+            text-align: center;
+            padding-top: 50px;
+            font-size: medium;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-weight: 100;
+        }
+        .EasyDiv{
+            padding-top: 20px;
+            padding-bottom: 20px;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+        .EasyBtn{
+            width: 420px;
+            height: 40px;
+            background-color: aqua;
+            border: 5px solid aqua;
+            border-radius: 5px;
+        }
+        .HardDiv{
+            padding-right: 15px;
+            padding-left: 15px;
+            padding-bottom: 20px;
+        }
+        .HardBtn{
+            width: 420px;
+            height: 40px;
+            background-color: brown;
+            border: 5px solid brown;
+            border-radius: 5px; 
+        }
+        .NewGameBtn{
+            width: 100px;
+            height: 40px;
+            background-color: aqua;
+            border: 5px solid aqua;
+            border-radius: 5px;
+        }
+        .UserGuesses{
+            font-size: medium;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-weight: 100;
+        }
+        input[type=number]{
+            width:120px;
+            border:2px solid #aaa;
+            border-radius:4px;
+            margin:8px 0;
+            outline:none;
+            padding:8px;
+            box-sizing:border-box;
+            transition:.3s;
+        }
+  
+        input[type=number]:focus{
+            border-color:dodgerBlue;
+            box-shadow:0 0 8px 0 dodgerBlue;
+        }
+        .RangeDiv{
+            display: flex;
+            background-color: dodgerblue;
+            height: 45px;
+            padding-bottom: 15px;
+        }
+        .GuessId{
+            font-size: medium;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-weight: 100;
+        }
+        .CurrGuess{
+            font-size: medium;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-weight: 100;
+        }
+        .InfoDiv{
+            text-align: left;
+        }
+        .StatsDiv{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+        .GameArea{
+            background-color:white;
+            height: 340px;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body onload="init()">
+    <div class="MainDiv" id="MainDiv">
+        <div class="Des">
+            Guess the random number between 1-100
+        </div>
+        <div>
+            <p class="NorP">Select the difficulty level:</p>
+            <div class="EasyDiv">
+                <button class="EasyBtn" onclick="EasyLevel()" id="EasyBtn">Easy Level - 10 Chances</button>
+            </div>
+            <div class="HardDiv">
+                <button class="HardBtn" onclick="HardLevel()" id="HardBtn">Hard Level - 5 Chances</button>
+            </div>
+        </div>
+    </div>
+    <div class="GameArea" id="GameArea">
+        <button  id="NewGameBtn" class="NewGameBtn" onclick="LoadGame()">New Game</button>
+        <section>
+            <h3 id="UserInt" class="UserGuesses">Your Guess:</h3>
+            <input type="number" id="UserInput" class="UserInput" min="1" max="100" onchange="CompareGuess()"></input>
+        </section>
+        <div>
+            <p class="CurrGuess">Current Guess</p>
+            <span class="GuessId" id="GuessId">1-100</span>
+            <div class="InfoDiv">
+                <div class="StatsDiv">
+                    <p>Number of Attempts:</p>
+                    <span id="PrevAtt">0</span>
+                </div>
+                <div class="StatsDiv">
+                    <p>Your Previous Guess:</p>
+                    <span id="NumGuess">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let CompGuess;
+        let userGuess = [];
+        let Attempts = 0;
+        let MaxAttempts;
+
+        function GameEnd(){
+            document.getElementById("NewGameBtn").style.display= "inline";
+            document.getElementById("GameArea").style.height = "370px";
+            document.getElementById("GameArea").style.paddingTop = "15px";
+        }
+
+        function LoadGame(){
+            window.location.reload();
+        }
+
+        function init(){
+            CompGuess = Math.floor(Math.random()*100+1)
+            console.log(CompGuess);
+            document.getElementById("NewGameBtn").style.display= "none";
+            document.getElementById("GameArea").style.display= "none";
+            document.getElementById("GameArea").style.backgroundColor = "White";
+        }
+  
+        function StartGame(){
+            document.getElementById("MainDiv").style.display= "none";
+            document.getElementById("GameArea").style.display = "block";
+        }
+
+        function EasyLevel(){
+            StartGame()
+            MaxAttempts = 10;
+        }
+
+        function HardLevel(){
+            StartGame()
+            MaxAttempts = 5;
+        }
+
+        function CompareGuess(){
+            const User = Number(document.getElementById("UserInput").value)
+            userGuess.push(" "+User);
+            document.getElementById("NumGuess").innerHTML = userGuess;
+            Attempts++
+            document.getElementById("PrevAtt").innerHTML = Attempts;
+
+            if (Attempts < MaxAttempts) {
+                if (User > CompGuess) {
+                document.getElementById("UserInt").innerHTML = "Your guess is too high!";
+                document.getElementById("UserInput").value = "";
+            }
+            else if (User < CompGuess) {
+                document.getElementById("UserInt").innerHTML = "Your guess is too low!";
+                document.getElementById("UserInput").value = "";
+            } else {
+                document.getElementById("UserInt").innerHTML = "Correct";
+                GameEnd()
+            }
+            }
+            else{
+                if (User > CompGuess) {
+                document.getElementById("UserInt").innerHTML = "YOU LOST!, The number was "+CompGuess;
+                GameEnd()
+            }
+            else if (User < CompGuess) {
+                document.getElementById("UserInt").innerHTML = "YOU LOST!, The number was "+CompGuess;
+                GameEnd()
+            } else {
+                document.getElementById("UserInt").innerHTML = "Correct";
+                GameEnd()
+            }
+            }
+        }
+
+    </script>
+</body>
+</html>
